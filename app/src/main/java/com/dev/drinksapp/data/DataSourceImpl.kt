@@ -1,14 +1,30 @@
 package com.dev.drinksapp.data
 
 import com.dev.drinksapp.data.model.Drink
+import com.dev.drinksapp.data.model.DrinkEntity
+import com.dev.drinksapp.db.DrinkDatabase
+import com.dev.drinksapp.repository.DataSourceRepository
 import com.dev.drinksapp.vo.Resource
 import com.dev.drinksapp.vo.RetrofitClient
 
-class DataSource {
+class DataSourceImpl(private val drinkDatabase: DrinkDatabase): DataSourceRepository {
 
-    suspend fun getDrinkByName(drinkName: String): Resource<List<Drink>>{
+    override suspend fun getDrinkByName(drinkName: String): Resource<List<Drink>>{
         return Resource.Success(RetrofitClient.api.getDrinksByName(drinkName).drinkList)
     }
+
+    override suspend fun insertDrinkIntoRoom(drink: DrinkEntity){
+        drinkDatabase.getDrinkDao().insertFavoriteDrink(drink)
+    }
+
+    override suspend fun getFavoriteDrinks(): Resource<List<DrinkEntity>> {
+        return Resource.Success(drinkDatabase.getDrinkDao().getAllFavoritesDrinks())
+    }
+
+    override suspend fun deleteFavoriteDrink(drink: DrinkEntity) {
+        drinkDatabase.getDrinkDao().deleteFavoriteDrink(drink)
+    }
+
 
     //val generateDrinksList = Resource.Success(listOf(
       //  Drink("https://cdn5.recetasdeescandalo.com/wp-content/uploads/2018/09/Coctel-margarita-como-prepararlo.-Receta-e-ingredientes.jpg", "Margarita", "Vodka"),

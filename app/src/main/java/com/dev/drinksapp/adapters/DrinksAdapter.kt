@@ -13,12 +13,17 @@ import kotlinx.android.synthetic.main.item_drinks.view.*
 
 class DrinksAdapter(
     private val context: Context,
-    private val drinksList: List<Drink>,
+    private val drinksList: MutableList<Drink>,
     private val itemClickListener: OnDrinkClickListener
 ): RecyclerView.Adapter<BaseViewHolder<*>>(){
 
     interface OnDrinkClickListener{
-        fun onDrinkClick(drink: Drink)
+        fun onDrinkClick(drink: Drink, position: Int)
+    }
+
+    fun deleteFavoriteDrink(position: Int){
+        drinksList.removeAt(position)
+        notifyItemRemoved(position)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<*> {
@@ -40,7 +45,7 @@ class DrinksAdapter(
             Glide.with(context).load(item.image).centerCrop().into(itemView.imgDrink)
             itemView.tvDrinkName.text = item.name
             itemView.tvDrinkDescription.text = item.description
-            itemView.setOnClickListener { itemClickListener.onDrinkClick(item) }
+            itemView.setOnClickListener { itemClickListener.onDrinkClick(item, position) }
         }
 
     }

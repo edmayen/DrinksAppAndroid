@@ -15,8 +15,9 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dev.drinksapp.R
 import com.dev.drinksapp.adapters.DrinksAdapter
-import com.dev.drinksapp.data.DataSource
+import com.dev.drinksapp.data.DataSourceImpl
 import com.dev.drinksapp.data.model.Drink
+import com.dev.drinksapp.db.DrinkDatabase
 import com.dev.drinksapp.repository.DrinksRepositoryImpl
 import com.dev.drinksapp.ui.viewmodel.MainViewModel
 import com.dev.drinksapp.ui.viewmodel.MainViewModelFactory
@@ -27,7 +28,7 @@ class MainFragment : Fragment(), DrinksAdapter.OnDrinkClickListener {
 
     private val viewModel by viewModels<MainViewModel>{ MainViewModelFactory(
         DrinksRepositoryImpl(
-            DataSource()
+            DataSourceImpl(DrinkDatabase.invoke(requireContext().applicationContext))
         )
     ) }
 
@@ -48,6 +49,9 @@ class MainFragment : Fragment(), DrinksAdapter.OnDrinkClickListener {
         setupRecyclerView()
         setupSearchView()
         setupObservers()
+        btnFavorites.setOnClickListener {
+            findNavController().navigate(R.id.action_mainFragment_to_favoritesFragment)
+        }
     }
 
     private fun setupObservers(){
@@ -58,7 +62,7 @@ class MainFragment : Fragment(), DrinksAdapter.OnDrinkClickListener {
                 }
                 is Resource.Success -> {
                     hideProgressBar()
-                    rvDrinks.adapter = DrinksAdapter(requireContext(), result.data, this)
+                    rvDrinks.adapter = DrinksAdapter(requireContext(), result.data.toMutableList(), this)
                 }
                 is Resource.Failure -> {
                     hideProgressBar()
@@ -89,14 +93,14 @@ class MainFragment : Fragment(), DrinksAdapter.OnDrinkClickListener {
         progressBarDrink.visibility = View.VISIBLE
     }
 
-    override fun onDrinkClick(drink: Drink) {
-        val bundle = Bundle()
-        bundle.putParcelable("drink", drink)
-        findNavController().navigate(R.id.action_mainFragment_to_detailFragment, bundle)
-    }
-
     private fun setupRecyclerView(){
         rvDrinks.layoutManager = LinearLayoutManager(requireContext())
         rvDrinks.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
+    }
+
+    override fun onDrinkClick(drink: Drink, position: Int) {
+        val bundle = Bundle()
+        bundle.putParcelable("drink", drink)
+        findNavController().navigate(R.id.action_mainFragment_to_detailFragment, bundle)
     }
 }

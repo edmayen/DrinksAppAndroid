@@ -21,6 +21,7 @@ data class Drink(
     val hasAlcohol: String = "Non_Alcoholic"
 ): Parcelable
 
+@Entity
 data class DrinkList(
     @SerializedName("drinks")
     val drinkList: List<Drink>
@@ -31,11 +32,11 @@ data class DrinkEntity(
     @PrimaryKey
     val drinkId: String,
     @ColumnInfo(name = "name_drink")
-    val drinkName: String?,
+    val drinkName: String,
     @ColumnInfo(name = "image_drink")
-    val drinkImage: String?,
+    val drinkImage: String,
     @ColumnInfo(name = "description_drink")
-    val drinkDescription: String?,
+    val drinkDescription: String,
     @ColumnInfo(name = "has_alcohol_drink")
-    val drinkHasAlcohol: String?
+    val drinkHasAlcohol: String
 )

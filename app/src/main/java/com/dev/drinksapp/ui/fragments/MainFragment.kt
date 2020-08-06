@@ -8,6 +8,7 @@ import android.view.ViewGroup
 
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -20,17 +21,14 @@ import com.dev.drinksapp.data.model.Drink
 import com.dev.drinksapp.db.DrinkDatabase
 import com.dev.drinksapp.repository.DrinksRepositoryImpl
 import com.dev.drinksapp.ui.viewmodel.MainViewModel
-import com.dev.drinksapp.ui.viewmodel.MainViewModelFactory
 import com.dev.drinksapp.vo.Resource
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_main.*
 
+@AndroidEntryPoint
 class MainFragment : Fragment(), DrinksAdapter.OnDrinkClickListener {
 
-    private val viewModel by viewModels<MainViewModel>{ MainViewModelFactory(
-        DrinksRepositoryImpl(
-            DataSourceImpl(DrinkDatabase.invoke(requireContext().applicationContext))
-        )
-    ) }
+    private val viewModel by activityViewModels<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

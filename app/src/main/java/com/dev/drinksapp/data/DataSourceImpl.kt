@@ -2,27 +2,29 @@ package com.dev.drinksapp.data
 
 import com.dev.drinksapp.data.model.Drink
 import com.dev.drinksapp.data.model.DrinkEntity
+import com.dev.drinksapp.db.DrinkDao
 import com.dev.drinksapp.db.DrinkDatabase
 import com.dev.drinksapp.repository.DataSourceRepository
 import com.dev.drinksapp.vo.Resource
 import com.dev.drinksapp.vo.RetrofitClient
+import javax.inject.Inject
 
-class DataSourceImpl(private val drinkDatabase: DrinkDatabase): DataSourceRepository {
+class DataSourceImpl @Inject constructor(private val drinkDao: DrinkDao): DataSourceRepository {
 
     override suspend fun getDrinkByName(drinkName: String): Resource<List<Drink>>{
         return Resource.Success(RetrofitClient.api.getDrinksByName(drinkName).drinkList)
     }
 
     override suspend fun insertDrinkIntoRoom(drink: DrinkEntity){
-        drinkDatabase.getDrinkDao().insertFavoriteDrink(drink)
+        drinkDao.insertFavoriteDrink(drink)
     }
 
     override suspend fun getFavoriteDrinks(): Resource<List<DrinkEntity>> {
-        return Resource.Success(drinkDatabase.getDrinkDao().getAllFavoritesDrinks())
+        return Resource.Success(drinkDao.getAllFavoritesDrinks())
     }
 
     override suspend fun deleteFavoriteDrink(drink: DrinkEntity) {
-        drinkDatabase.getDrinkDao().deleteFavoriteDrink(drink)
+        drinkDao.deleteFavoriteDrink(drink)
     }
 
 

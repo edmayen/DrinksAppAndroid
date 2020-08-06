@@ -3,8 +3,9 @@ package com.dev.drinksapp.repository
 import com.dev.drinksapp.data.model.Drink
 import com.dev.drinksapp.data.model.DrinkEntity
 import com.dev.drinksapp.vo.Resource
+import javax.inject.Inject
 
-class DrinksRepositoryImpl(private val dataSource: DataSourceRepository): DrinksRepository {
+class DrinksRepositoryImpl @Inject constructor(private val dataSource: DataSourceRepository): DrinksRepository {
     override suspend fun getDrinksList(drinkName: String): Resource<List<Drink>> {
         return dataSource.getDrinkByName(drinkName)
     }

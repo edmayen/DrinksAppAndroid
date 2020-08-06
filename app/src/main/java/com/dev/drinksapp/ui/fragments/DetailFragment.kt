@@ -1,32 +1,27 @@
 package com.dev.drinksapp.ui.fragments
 
 import android.os.Bundle
-import com.dev.drinksapp.ui.viewmodel.MainViewModel
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.dev.drinksapp.R
-import com.dev.drinksapp.data.DataSourceImpl
 import com.dev.drinksapp.data.model.Drink
 import com.dev.drinksapp.data.model.DrinkEntity
-import com.dev.drinksapp.db.DrinkDatabase
-import com.dev.drinksapp.repository.DrinksRepositoryImpl
-import com.dev.drinksapp.ui.viewmodel.MainViewModelFactory
+import com.dev.drinksapp.ui.viewmodel.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_detail.*
 
+
+@AndroidEntryPoint
 class DetailFragment : Fragment() {
 
     private lateinit var drink: Drink
 
-    private val viewModel by viewModels<MainViewModel>{ MainViewModelFactory(
-        DrinksRepositoryImpl(
-            DataSourceImpl(DrinkDatabase.invoke(requireContext().applicationContext))
-        )
-    ) }
+    private val viewModel by activityViewModels<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -1,5 +1,6 @@
 package com.dev.drinksapp.ui.viewmodel
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.dev.drinksapp.data.model.Drink
 import com.dev.drinksapp.data.model.DrinkEntity
@@ -9,7 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
-class MainViewModel(private val repo: DrinksRepository): ViewModel(){
+class MainViewModel @ViewModelInject constructor(private val repo: DrinksRepository): ViewModel(){
 
     private val drinksData = MutableLiveData<String>()
 

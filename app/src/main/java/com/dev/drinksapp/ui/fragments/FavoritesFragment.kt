@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -19,18 +20,15 @@ import com.dev.drinksapp.data.model.DrinkEntity
 import com.dev.drinksapp.db.DrinkDatabase
 import com.dev.drinksapp.repository.DrinksRepositoryImpl
 import com.dev.drinksapp.ui.viewmodel.MainViewModel
-import com.dev.drinksapp.ui.viewmodel.MainViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_favorites.*
 
+@AndroidEntryPoint
 class FavoritesFragment : Fragment(), DrinksAdapter.OnDrinkClickListener {
 
     private lateinit var adapter: DrinksAdapter
 
-    private val viewModel by viewModels<MainViewModel>{ MainViewModelFactory(
-        DrinksRepositoryImpl(
-            DataSourceImpl(DrinkDatabase.invoke(requireContext().applicationContext))
-        )
-    ) }
+    private val viewModel by activityViewModels<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
